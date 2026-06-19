@@ -44,7 +44,7 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 
 > "LLMs use statistical algorithms to guess what should come next. The result tends toward the most statistically likely result that applies to the widest variety of cases."
 
-## 31 Patterns Detected (with Before/After Examples)
+## 33 Patterns Detected (with Before/After Examples)
 
 ### Content Patterns
 
@@ -106,6 +106,8 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 | 29 | **Ornamental -ly intensifier adverbs** | "markedly reduced", "critically important", "remarkably consistent" | Remove decorative intensifiers; keep functional ones ("slightly", "consistently", "approximately") |
 | 30 | **Connective-preserving edits** (never bare-delete a transition) | "X reduced death. The benefit appeared within months." (choppy) | "X also reduced death, and this benefit appeared within months." |
 | 31 | **Paragraph cohesion** (old-to-new flow + paragraph-opening markers) | Disconnected sentences after editing | Mandatory final check: each sentence links to the previous one; contrast/continuity openers (However / On the other hand / Overall / Taken together) survive |
+| 32 | **Paraphrastic repetition** | "X is associated with Y. In other words, X may contribute to Y. That is, X plays a role in Y." | State each claim once; keep the most specific version |
+| 33 | **Content-free evaluation sentences** | "This is a noteworthy finding." "This observation is of clinical significance." | Delete standalone verdicts; if important, show why with data or mechanism |
 
 ### Preserved Academic Writing (do NOT flag as AI)
 
@@ -145,8 +147,6 @@ Examples for Patterns 19–31 are based on the author's (K. Matsui) observations
 
 The AI-vocabulary patterns (Pattern 7) draw on the following papers that quantified words and phrases with increased or decreased frequency in post-ChatGPT medical and scientific writing:
 
-> Matsui K. Delving into PubMed records: some terms in medical writing have drastically changed after the arrival of ChatGPT. *medRxiv*. 2025. doi:[10.1101/2024.05.14.24307373](https://doi.org/10.1101/2024.05.14.24307373)
-
 > Matsui K. Delving Into PubMed Records: How AI-Influenced Vocabulary has Transformed Medical Writing since ChatGPT. *Perspect Med Educ*. 2025;14(1):882-890. doi:[10.5334/pme.1929](https://doi.org/10.5334/pme.1929)
 
 > Bao T, Zhao Y, Mao J, et al. Examining linguistic shifts in academic writing before and after the launch of ChatGPT: a study on preprint papers. *Scientometrics*. 2025;130:3597-3627. doi:[10.1007/s11192-025-05341-y](https://doi.org/10.1007/s11192-025-05341-y)
@@ -165,6 +165,7 @@ This is a paper I wrote. Using PubMed records, I measured how frequently LLMs su
 
 ## Version History
 
+- **1.4.0** - Added Pattern 32 (Paraphrastic repetition: detect and remove same-claim restatements joined by "In other words" / "That is" / "Essentially") and Pattern 33 (Content-free evaluation sentences: remove standalone verdicts like "This is a noteworthy finding" that add no data or mechanism). Extended Pattern 7 vocabulary with "comprehensive" (abstract use only), "holistic", and "multifaceted".
 - **1.3.1** - Extended Pattern 27 to vary connectives by logical relation (result / addition / contrast / concession / reason / sequence groups) to avoid mechanical repetition, with a guardrail against decorative connective-sprinkling (this is NOT an exception to Pattern 11).
 - **1.3.0** - Added Pattern 29 (Ornamental -ly intensifier adverbs: remove decorative "markedly/critically/remarkably" while keeping functional adverbs such as "slightly/consistently/approximately"), Pattern 30 (Connective-preserving edits: never bare-delete a transition — replace or restructure to avoid choppy asyndeton), and Pattern 31 (Paragraph cohesion: a mandatory final check for old-to-new flow and surviving paragraph-opening markers). Relaxed Pattern 7 so "Additionally" is allowed once per paragraph (only excessive use is flagged).
 - **1.2.x** - Reworked Pattern 26 into "Minor word-choice refinements" (remain → be-verb, given → due to); added Pattern 27 (Preserve logical discourse markers), Pattern 28 (Re-contextualize over-condensed semantic links), and context-dependent handling of "linked/associated" (Pattern 19). (The earlier "Underused Classical Academic Terms" pattern was retired during this restructuring; its vocabulary is now covered by Pattern 7 and the cited author papers.)
