@@ -1,6 +1,6 @@
 ---
 name: humanizer_academic
-version: 1.3.1
+version: 1.4.0
 description: |
   Remove signs of AI-generated writing from academic medical papers. Use when editing
   or reviewing manuscripts to make them sound more natural and professionally written.
@@ -8,8 +8,9 @@ description: |
   Detects and fixes patterns including: inflated significance claims, superficial
   -ing analyses, vague attributions, AI vocabulary words, copula avoidance,
   excessive hedging, generic conclusions, informal word choices (linked/beyond/via/where/yield),
-  overly assertive causal claims, artificially condensed expressions, and ornamental
-  -ly intensifier adverbs (markedly/critically/remarkably without quantitative backing).
+  overly assertive causal claims, artificially condensed expressions, ornamental
+  -ly intensifier adverbs (markedly/critically/remarkably without quantitative backing),
+  paraphrastic repetition of the same claim, and content-free evaluation sentences.
   Preserves legitimate academic writing: standard transitions (Notably, Prior studies have shown),
   logical discourse markers (Although, Whereas, Thus, Based on these results, As expected),
   functional adverbs (slightly, consistently, modestly, approximately),
@@ -168,7 +169,7 @@ The following transitional and attribution phrases are **standard academic writi
 
 ### 7. Overused "AI Vocabulary" Words
 
-**High-frequency AI words:** align with, crucial, delve, emphasizing, enduring, enhance, fostering, garner, highlight (verb), interplay, intricate/intricacies, key (adjective), landscape (abstract noun), pivotal, showcase, tapestry (abstract noun), testament, underscore (verb), valuable, vibrant
+**High-frequency AI words:** align with, comprehensive (abstract use, e.g. "comprehensive analysis" with no specifics — keep when describing a concrete method/assessment), crucial, delve, emphasizing, enduring, enhance, fostering, garner, highlight (verb), holistic, interplay, intricate/intricacies, key (adjective), landscape (abstract noun), multifaceted, pivotal, showcase, tapestry (abstract noun), testament, underscore (verb), valuable, vibrant
 
 **Problem:** These words appear far more frequently in post-2023 text. They often co-occur.
 
@@ -570,6 +571,48 @@ Use "associated with" only when the relationship is genuinely a statistical/obse
 1. Does the first sentence state what the paragraph claims or covers?
 2. From the second sentence on, is each sentence linked to the previous one by either a connective or an echoed key word? If a link was broken by an edit, restore it (Pattern 30).
 3. Across paragraphs, are the contrast/continuity openers (However / In contrast / On the other hand / Overall / Taken together / In addition to X) still present where the argument needs them? Add one if a paragraph now starts abruptly.
+
+---
+
+### 32. Paraphrastic Repetition of the Same Claim
+
+**Problem:** LLMs restate the same claim 2–3 times using different words within the same paragraph or across adjacent sentences, often joined by "In other words," "That is," "Put differently," or "Essentially,". Each sentence should advance the argument, not rephrase the previous one.
+
+**Words to watch:** In other words, That is, Put differently, Essentially, To put it another way, Simply put, This means that (when followed by a near-verbatim restatement)
+
+**Before:**
+> These findings suggest that sleep disturbance is associated with depressive symptoms. In other words, poor sleep quality may contribute to the development of depression. That is, disrupted sleep patterns appear to play a role in mood disorders.
+
+**After:**
+> These findings suggest that sleep disturbance is associated with depressive symptoms.
+
+**Before:**
+> Empagliflozin reduced the risk of cardiovascular death. Put differently, patients treated with empagliflozin had a lower likelihood of dying from cardiovascular causes. Essentially, the drug conferred a survival benefit.
+
+**After:**
+> Empagliflozin reduced the risk of cardiovascular death.
+
+**Key principle:** State each claim once. If a second sentence follows, it should add new information (a mechanism, a comparison, a qualification), not repackage the same assertion in different vocabulary. When removing paraphrastic repetitions, keep the version that is most specific or most precisely worded and delete the rest. Apply Pattern 30 (connective-preserving edits) if deletion would break the logical flow to the next sentence.
+
+**EXCEPTION:** Genuine clarification of a technical term is not paraphrastic repetition. "The hazard ratio was 0.65, meaning that empagliflozin reduced the event rate by 35% relative to placebo" adds information by translating a statistical metric into a clinical interpretation. The problem is when the "clarification" says the same thing in equally vague terms.
+
+---
+
+### 33. Content-free Evaluation Sentences
+
+**Problem:** LLMs insert standalone sentences that evaluate a finding's importance without adding any information — no data, no mechanism, no comparison, just a verdict of significance. These are distinct from Pattern 1 (significance inflation embedded within data-bearing sentences) and Pattern 3 (-ing tails appended to factual sentences); Pattern 33 targets freestanding evaluation sentences that contain nothing but the evaluation itself.
+
+**Words to watch:** This is an important/significant/noteworthy finding. These results are of clinical/public health significance. This observation is clinically relevant. This finding has important implications. This is a meaningful/notable result. This deserves attention.
+
+**Before:**
+> Empagliflozin reduced cardiovascular death by 38%. This is a noteworthy finding. The benefit was consistent across subgroups. This observation is of clinical significance.
+
+**After:**
+> Empagliflozin reduced cardiovascular death by 38%, and the benefit was consistent across subgroups.
+
+**Key principle:** If the finding is genuinely significant, show why: state the mechanism, the clinical consequence, or the contrast with prior evidence. A sentence that merely labels a finding as "important" without explaining what makes it important adds no information and should be deleted. When deleting, apply Pattern 30 (connective-preserving edits) to maintain flow.
+
+**EXCEPTION:** An evaluation sentence is acceptable when it immediately follows up with a specific reason: "This finding is clinically relevant because it identifies patients who may benefit from earlier intervention." Here, the evaluation carries forward into a concrete implication. The standalone, terminal evaluation ("This is important." Full stop.) is the problem.
 
 ---
 
