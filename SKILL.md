@@ -311,6 +311,7 @@ The following transitional and attribution phrases are **standard academic writi
 - "It is important to note that mortality was reduced" → "Mortality was reduced"
 - "The study has the ability to detect" → "The study can detect"
 - "With respect to safety endpoints" → "For safety endpoints"
+- "in terms of sleep quality" → "with respect to sleep quality"
 
 **EXCEPTION:** Single-word academic transitions ("Notably,", "Importantly,", "Interestingly,") are standard in research papers and should NOT be removed. Only flag them when stacked excessively (e.g., three in one paragraph).
 
