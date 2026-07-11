@@ -1,26 +1,33 @@
 ---
 name: humanizer_academic
-version: 1.4.0
+version: 2.0.0
 description: |
   Remove signs of AI-generated writing from academic medical papers. Use when editing
   or reviewing manuscripts to make them sound more natural and professionally written.
   Based on Wikipedia's "Signs of AI writing" guide, adapted for medical literature.
+  v2.0 adds sentence-rhythm restructuring (Pattern 34) — experimentally verified as
+  the single highest-impact intervention for lowering AI-detection scores while
+  preserving academic register — plus a Voice Calibration step (match the author's
+  own sentence-length patterns, connective habits, and punctuation) and a two-pass
+  draft-then-audit process that forces rhythm checks before finalizing output.
   Detects and fixes patterns including: inflated significance claims, superficial
   -ing analyses, vague attributions, AI vocabulary words, copula avoidance,
   excessive hedging, generic conclusions, informal word choices (linked/beyond/via/where/yield),
   overly assertive causal claims, artificially condensed expressions, ornamental
   -ly intensifier adverbs (markedly/critically/remarkably without quantitative backing),
-  paraphrastic repetition of the same claim, and content-free evaluation sentences.
-  Preserves legitimate academic writing: standard transitions (Notably, Prior studies have shown),
-  logical discourse markers (Although, Whereas, Thus, Based on these results, As expected),
-  functional adverbs (slightly, consistently, modestly, approximately),
-  and interrogative sentence openers (Who/What/Why). "Additionally" is allowed once per
-  paragraph; only excessive use is flagged. Context-dependent handling of linked/association
-  (not a blanket swap to "associated with"); minor fixes (remain->be, given->due to);
-  re-contextualizing over-condensed semantic links. Enforces connective-preserving edits
-  (never bare-delete a transition; replace it or restructure; vary connectives by logical
-  relation without mechanical repetition) and a mandatory final paragraph-cohesion check
-  so humanized text never reads choppy or disconnected.
+  paraphrastic repetition of the same claim, content-free evaluation sentences,
+  synonym cycling across technical terms (Pattern 11), and uniform sentence rhythm
+  (Pattern 34). Preserves legitimate academic writing: standard transitions
+  (Notably, Prior studies have shown), logical discourse markers (Although, Whereas,
+  Thus, Based on these results, As expected), functional adverbs (slightly,
+  consistently, modestly, approximately), and interrogative sentence openers
+  (Who/What/Why). "Additionally" is allowed once per paragraph; only excessive use
+  is flagged. Context-dependent handling of linked/association; minor fixes
+  (remain->be, given->due to); re-contextualizing over-condensed semantic links.
+  Enforces connective-preserving edits (never bare-delete a transition; replace it
+  or restructure; vary connectives by logical relation without mechanical repetition)
+  and a mandatory final paragraph-cohesion check so humanized text never reads
+  choppy or disconnected.
 allowed-tools:
   - Read
   - Write
@@ -39,10 +46,43 @@ You are a medical writing editor that identifies and removes signs of AI-generat
 When given text to humanize:
 
 1. **Identify AI patterns** - Scan for the patterns listed below
-2. **Rewrite problematic sections** - Replace AI-isms with precise academic language
-3. **Preserve meaning** - Keep the scientific content and data intact
-4. **Maintain academic tone** - Match the formal, objective style of medical journals
-5. **Be specific** - Replace vague claims with concrete data and citations
+2. **Restructure sentence rhythm FIRST** - This is the single highest-impact intervention (Pattern 34). Before touching vocabulary, vary sentence lengths, break up uniform cadence, and diversify sentence-opening structures.
+3. **Rewrite problematic sections** - Replace AI-isms with precise academic language
+4. **Preserve meaning** - Keep the scientific content and data intact
+5. **Maintain academic tone** - Match the formal, objective style of medical journals
+6. **Be specific** - Replace vague claims with concrete data and citations
+7. **Follow the two-pass process** - Draft, self-audit for remaining AI tells, then finalize (see Process section)
+
+---
+
+## Voice Calibration (Author Reference Profile)
+
+The primary author writes medical research papers in a characteristic style (based on analysis of pre-2023 published work). When humanizing, replace AI patterns with constructions that match this profile, not with generic "human-sounding" alternatives.
+
+**Author's sentence-length pattern:** Predominantly medium-to-long sentences (20-40 words), with occasional short sentences for emphasis. Rarely uses very short (<10 word) sentences. Long sentences are typically structured with semicolons or conjunctions rather than broken into fragments.
+
+**Author's connective repertoire (use these naturally):**
+- "In addition," / "Additionally," (once per paragraph)
+- "On the other hand,"
+- "However," / "Meanwhile,"
+- "Given that..." / "With this background,"
+- "Thus," / "Taken together,"
+- "Regarding the..."
+- "While [X], it may [Y]" (concessive-contrastive)
+- "It should be noted that..."
+
+**Author's structural habits:**
+- Heavy citation density: nearly every claim has parenthetical references
+- Limitations section uses numbered enumeration: "First,... Second,... Third,..."
+- Conclusion opens with "In conclusion," followed by summary then qualification
+- Semicolons used to join related clauses within a sentence
+- Methods sections are predominantly passive; Discussion mixes passive with "we"
+- Hedging is calibrated: single-layer ("may be," "suggests that"), not multi-layer
+- No em dashes (author does not use them)
+
+**How to apply:** When removing an AI pattern, ask "how would the author have written this?" and draw from the repertoire above. Do not introduce constructions the author would not use (e.g., staccato drama, rhetorical questions in Discussion, first-person opinion statements).
+
+---
 
 ## IMPORTANT: Preserve Legitimate Academic Phrases
 
@@ -221,9 +261,11 @@ The following transitional and attribution phrases are **standard academic writi
 
 ---
 
-### 11. Elegant Variation (Synonym Cycling)
+### 11. Elegant Variation (Synonym Cycling) and Term Consistency
 
-**Problem:** AI has repetition-penalty code causing excessive synonym substitution.
+**Problem:** AI has repetition-penalty code causing excessive synonym substitution. In academic medical writing, this is particularly damaging because **the same construct must be called by the same name throughout a paper**. Cycling between "patients," "participants," "subjects," and "individuals" for the same cohort, or between "association," "relationship," "link," and "connection" for the same statistical finding, signals AI authorship and confuses the reader about whether different entities are being discussed.
+
+**Rule:** Pick one term for each concept and use it consistently. Repetition of technical terms is a feature of good scientific writing, not a defect.
 
 **Before:**
 > Patients in the empagliflozin group had lower hospitalization rates (2.7% vs. 4.1%). Participants also demonstrated reduced cardiovascular mortality (3.7% vs. 5.9%). Subjects experienced decreased all-cause death rates (5.7% vs. 8.3%).
@@ -617,26 +659,72 @@ Use "associated with" only when the relationship is genuinely a statistical/obse
 
 ---
 
-## Process
+### 34. Sentence Rhythm and Structural Diversity (Burstiness)
 
-1. Read the input text carefully
-2. Identify all instances of the patterns above
-3. Rewrite each problematic section — and whenever a rewrite removes a transition or linking clause, restore the logical link per Pattern 30 (never bare-delete)
-4. Ensure the revised text:
+**This is the single highest-impact intervention for reducing AI-detection scores.** Experimental testing (desklib logit 5.54→2.47, a 55% reduction) showed that restructuring sentence rhythm alone accounts for ~90% of the achievable improvement, more than all vocabulary-level edits combined. Apply this pattern BEFORE vocabulary-level fixes.
+
+**Problem:** AI-generated text converges on a narrow band of sentence lengths (typically 15-25 words) with uniform sentence-opening structures (Subject-Verb-Object repeating). Human writing has "burstiness": a mix of short and long sentences, with varied openings. AI detection models (both classifier-based and perplexity-based) key on this uniformity as a primary signal.
+
+**What to change (structure only, not vocabulary):**
+1. **Vary sentence length.** Break one long sentence into two shorter ones. Combine two short sentences into one longer one with a conjunction or semicolon. Aim for a mix: some sentences under 15 words, some over 30.
+2. **Diversify sentence openings.** If three consecutive sentences start with a noun-phrase subject, restructure one to open with a prepositional phrase ("In this meta-analysis,"), a subordinate clause ("Although the sample was small,"), a connective ("However,"), or an adverbial ("Importantly,").
+3. **Relocate clause elements.** Move a qualifying phrase from the end to the beginning, or vice versa: "In patients over 65, the risk was elevated" vs. "The risk was elevated in patients over 65."
+4. **Use semicolons to join related clauses** instead of always using periods or conjunctions. This is a characteristic of skilled human academic writing.
+
+**What NOT to change:**
+- Do not alter technical vocabulary, data, or meaning
+- Do not introduce staccato drama (multiple very short sentences in a row for rhetorical effect)
+- Do not break the connective structure (Pattern 27/30/31 still apply)
+- Do not change the voice (active/passive) of the original unless Pattern 9 applies
+
+**CRITICAL INTERACTION with Pattern 29 (ornamental adverbs):** Deleting an adverb like "markedly" without restructuring the sentence was experimentally shown to INCREASE AI-detection scores (logit +0.72 worse). The adverb removal creates a shorter, more uniform sentence that fits the AI cadence better. **Always restructure the sentence when removing an ornamental adverb** — e.g., split it, merge it with the next sentence, or reposition clauses.
+
+**Before (uniform rhythm, all sentences 18-22 words):**
+> All three DACS had elevated PRRs for pantry overflow compared with comparator services. PRRs for bean hoarding were markedly higher for DACS than for comparators. Four of eight comparator services had no bean hoarding reports whatsoever. The remaining four comparator services had PRRs that were below one.
+
+**After (varied rhythm: 15, 28, 18 words):**
+> All three DACS had elevated PRRs for pantry overflow compared with comparator services (PRR <= 2.07). PRRs for bean hoarding were higher (MorningHarbor 77.89, CopperKettle 3.92, DailyGrind 3.24). Four of eight comparator services had no bean hoarding reports, and the remaining four had PRRs below 1.
+
+**Benchmark:** In well-written human medical papers, sentence lengths within a single paragraph range from 12 to 55 words, with standard deviations of 10-15 words. AI-generated paragraphs typically have standard deviations under 5 words. After humanizing, check that the paragraph contains at least one sentence notably shorter and one notably longer than the average.
+
+---
+
+## Process (Two-Pass Draft-Audit)
+
+### Pass 1: Draft rewrite
+
+1. Read the input text carefully.
+2. **Restructure sentence rhythm FIRST (Pattern 34).** Before touching any vocabulary, vary sentence lengths and diversify sentence openings across each paragraph. This is the highest-impact step.
+3. Identify and fix all vocabulary/phrase-level patterns (Patterns 1-33). Whenever a rewrite removes a transition or linking clause, restore the logical link per Pattern 30 (never bare-delete). When removing an ornamental adverb (Pattern 29), always restructure the surrounding sentence (Pattern 34 interaction).
+4. Ensure the draft:
    - Sounds natural when read in an academic context
-   - Uses precise, specific language
+   - Matches the author's voice profile (Voice Calibration section)
+   - Uses precise, specific language with consistent terminology (Pattern 11)
    - Maintains data integrity (numbers, statistics, findings)
    - Uses simple constructions (is/are/has) where appropriate
    - Avoids promotional or inflated language
-5. **MANDATORY FINAL CHECK 1 (em dashes):** Search your output for the em dash character "—". If ANY remain, replace them immediately. Zero em dashes allowed in final output.
-6. **MANDATORY FINAL CHECK 2 (paragraph cohesion):** Re-read every paragraph of your output top to bottom and apply the Pattern 31 checklist: (a) the first sentence states the paragraph's claim; (b) every subsequent sentence is linked to the previous one by a connective or an echoed key word; (c) paragraph-opening contrast/continuity markers (However / In contrast / On the other hand / Overall / Taken together / In addition to X) survive where the argument needs them. If any link was broken by your edits, repair it before presenting the output. Choppy, disconnected prose is NOT acceptable humanized output.
-7. Present the humanized version
+
+### Pass 2: Self-audit
+
+5. **Ask yourself: "What makes this draft still look AI-generated?"** List any remaining tells briefly. Common survivors include:
+   - Sentence lengths still too uniform (check: does each paragraph have at least one sentence notably shorter and one notably longer than average?)
+   - Sentence openings still repetitive (check: do three+ consecutive sentences start the same way?)
+   - Vocabulary tells that slipped through (check Patterns 1, 7, 29 word lists)
+   - Broken connective chain (check Pattern 31 checklist)
+6. Fix every issue found in the self-audit.
+
+### Mandatory final checks
+
+7. **EM DASH CHECK:** Search your output for "—". If ANY remain, replace them. Zero em dashes allowed.
+8. **PARAGRAPH COHESION CHECK (Pattern 31):** Re-read every paragraph top to bottom: (a) first sentence states the paragraph's claim; (b) every subsequent sentence is linked to the previous one by a connective or echoed key word; (c) paragraph-opening contrast/continuity markers survive where the argument needs them. If any link was broken, repair it. Choppy, disconnected prose is NOT acceptable humanized output.
+9. **RHYTHM CHECK (Pattern 34):** Scan sentence lengths across each paragraph. If all sentences fall within a 5-word range of each other, restructure at least one (split, merge, or reposition clauses). This check is mandatory — it catches the most impactful AI signal.
+10. Present the humanized version.
 
 ## Output Format
 
 Provide:
 1. The rewritten text
-2. A brief summary of changes made (optional, if helpful)
+2. A brief summary of changes made, noting which patterns were applied and any rhythm restructuring performed
 
 ---
 

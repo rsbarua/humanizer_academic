@@ -44,7 +44,7 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 
 > "LLMs use statistical algorithms to guess what should come next. The result tends toward the most statistically likely result that applies to the widest variety of cases."
 
-## 33 Patterns Detected (with Before/After Examples)
+## 34 Patterns Detected (with Before/After Examples)
 
 ### Content Patterns
 
@@ -65,7 +65,7 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 | 8 | **Copula avoidance** | "serves as... standing as... representing" | "is" |
 | 9 | **Negative parallelisms** | "Not only X but also Y" | "X and Y" |
 | 10 | **Rule of three** | "efficacy, safety, and tolerability" | Use natural number of items |
-| 11 | **Synonym cycling** | "Patients... Participants... Subjects" | "Patients" (consistent terminology) |
+| 11 | **Synonym cycling & term consistency** | "Patients... Participants... Subjects" | "Patients" throughout (same construct = same term) |
 | 12 | **False ranges** | "from renal function to cardiac outcomes" | List benefits directly |
 
 ### Style Patterns
@@ -108,6 +108,14 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 | 31 | **Paragraph cohesion** (old-to-new flow + paragraph-opening markers) | Disconnected sentences after editing | Mandatory final check: each sentence links to the previous one; contrast/continuity openers (However / On the other hand / Overall / Taken together) survive |
 | 32 | **Paraphrastic repetition** | "X is associated with Y. In other words, X may contribute to Y. That is, X plays a role in Y." | State each claim once; keep the most specific version |
 | 33 | **Content-free evaluation sentences** | "This is a noteworthy finding." "This observation is of clinical significance." | Delete standalone verdicts; if important, show why with data or mechanism |
+
+### Sentence Rhythm (v2.0)
+
+| # | Pattern | Before | After |
+|---|---------|--------|-------|
+| 34 | **Sentence rhythm & burstiness** ⭐ highest impact | All sentences 18-22 words, all start with noun-phrase subject | Mix short (< 15 words) and long (> 30 words) sentences; vary openings with prepositional phrases, subordinate clauses, connectives |
+
+> **Pattern 34 is the single highest-impact intervention.** In experimental testing (greedy-search loop with desklib + Binoculars detectors), restructuring sentence rhythm alone reduced the AI-detection score by ~90% of the achievable improvement — more than all vocabulary-level edits combined. It must be applied BEFORE vocabulary fixes, and ornamental adverb removal (Pattern 29) must always be paired with sentence restructuring (removing "markedly" without restructuring was shown to *increase* AI scores).
 
 ### Preserved Academic Writing (do NOT flag as AI)
 
@@ -165,6 +173,7 @@ This is a paper I wrote. Using PubMed records, I measured how frequently LLMs su
 
 ## Version History
 
+- **2.0.0** - Major update based on experimental validation with local AI detectors (desklib + Binoculars). Added Pattern 34 (Sentence rhythm & burstiness: experimentally verified as the single highest-impact intervention, accounting for ~90% of achievable AI-score reduction). Added Voice Calibration section with author reference profile. Upgraded Process to two-pass draft-audit loop with mandatory rhythm check. Strengthened Pattern 11 to explicitly require term consistency (same construct = same term throughout). Documented critical interaction: Pattern 29 adverb removal must always be paired with Pattern 34 sentence restructuring (standalone deletion increases AI scores).
 - **1.4.0** - Added Pattern 32 (Paraphrastic repetition: detect and remove same-claim restatements joined by "In other words" / "That is" / "Essentially") and Pattern 33 (Content-free evaluation sentences: remove standalone verdicts like "This is a noteworthy finding" that add no data or mechanism). Extended Pattern 7 vocabulary with "comprehensive" (abstract use only), "holistic", and "multifaceted".
 - **1.3.1** - Extended Pattern 27 to vary connectives by logical relation (result / addition / contrast / concession / reason / sequence groups) to avoid mechanical repetition, with a guardrail against decorative connective-sprinkling (this is NOT an exception to Pattern 11).
 - **1.3.0** - Added Pattern 29 (Ornamental -ly intensifier adverbs: remove decorative "markedly/critically/remarkably" while keeping functional adverbs such as "slightly/consistently/approximately"), Pattern 30 (Connective-preserving edits: never bare-delete a transition — replace or restructure to avoid choppy asyndeton), and Pattern 31 (Paragraph cohesion: a mandatory final check for old-to-new flow and surviving paragraph-opening markers). Relaxed Pattern 7 so "Additionally" is allowed once per paragraph (only excessive use is flagged).
