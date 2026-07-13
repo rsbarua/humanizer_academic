@@ -1,33 +1,10 @@
 ---
 name: humanizer_academic
-version: 2.0.0
+version: 2.1.0
 description: |
   Remove signs of AI-generated writing from academic medical papers. Use when editing
   or reviewing manuscripts to make them sound more natural and professionally written.
   Based on Wikipedia's "Signs of AI writing" guide, adapted for medical literature.
-  v2.0 adds sentence-rhythm restructuring (Pattern 34) — experimentally verified as
-  the single highest-impact intervention for lowering AI-detection scores while
-  preserving academic register — plus a Voice Calibration step (match the author's
-  own sentence-length patterns, connective habits, and punctuation) and a two-pass
-  draft-then-audit process that forces rhythm checks before finalizing output.
-  Detects and fixes patterns including: inflated significance claims, superficial
-  -ing analyses, vague attributions, AI vocabulary words, copula avoidance,
-  excessive hedging, generic conclusions, informal word choices (linked/beyond/via/where/yield),
-  overly assertive causal claims, artificially condensed expressions, ornamental
-  -ly intensifier adverbs (markedly/critically/remarkably without quantitative backing),
-  paraphrastic repetition of the same claim, content-free evaluation sentences,
-  synonym cycling across technical terms (Pattern 11), and uniform sentence rhythm
-  (Pattern 34). Preserves legitimate academic writing: standard transitions
-  (Notably, Prior studies have shown), logical discourse markers (Although, Whereas,
-  Thus, Based on these results, As expected), functional adverbs (slightly,
-  consistently, modestly, approximately), and interrogative sentence openers
-  (Who/What/Why). "Additionally" is allowed once per paragraph; only excessive use
-  is flagged. Context-dependent handling of linked/association; minor fixes
-  (remain->be, given->due to); re-contextualizing over-condensed semantic links.
-  Enforces connective-preserving edits (never bare-delete a transition; replace it
-  or restructure; vary connectives by logical relation without mechanical repetition)
-  and a mandatory final paragraph-cohesion check so humanized text never reads
-  choppy or disconnected.
 allowed-tools:
   - Read
   - Write
