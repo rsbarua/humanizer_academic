@@ -1,36 +1,36 @@
 # Humanizer Academic
 
-A Claude Code skill that removes signs of AI-generated writing from academic medical papers, making them sound more natural and professionally written.
+A skill that removes signs of AI-generated writing from academic medical papers, making them sound more natural and professionally written.
 
-## Installation
+The whole thing is a single file, `SKILL.md`. It is a long structured prompt, so you do not need Claude Code to use it.
 
-### Recommended (clone directly into Claude Code skills directory)
+## Usage
+
+### In a browser (Claude, ChatGPT, or anything that takes an attachment)
+
+1. Download [`SKILL.md`](SKILL.md) from this repository.
+2. Upload it to the chat along with the text you want to edit.
+3. Ask: `Apply this skill to the following manuscript text: [your text]`
+
+That is all. No installation.
+
+### In Claude Code
+
+Clone into your skills directory:
 
 ```bash
 mkdir -p ~/.claude/skills
 git clone https://github.com/matsuikentaro1/humanizer_academic.git ~/.claude/skills/humanizer_academic
 ```
 
-### Manual install/update (only the skill file)
-
-If you already have this repo cloned (or you downloaded `SKILL.md`), copy the skill file into Claude Code's skills directory:
+Or, if you already have the repo cloned or downloaded `SKILL.md` on its own:
 
 ```bash
 mkdir -p ~/.claude/skills/humanizer_academic
 cp SKILL.md ~/.claude/skills/humanizer_academic/
 ```
 
-## Usage
-
-In Claude Code, invoke the skill:
-
-```
-/humanizer_academic
-
-[paste your manuscript text here]
-```
-
-Or ask Claude to humanize text directly:
+The skill loads itself when it is relevant, so you can simply ask:
 
 ```
 Please humanize this academic text: [your text]
